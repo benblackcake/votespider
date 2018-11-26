@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+{% load static %}
+{% block content %}
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>BenCreate</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'font-awesome/css/font-awesome.min.css' %}" />
+
+    <script type="text/javascript" src="{% static 'js/jquery-1.10.2.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+
+<div class="page-header">
+    <h1>Bar Chart <small>中選會爬蟲</small></h1>
+</div>
+
+<!-- Bar Chart - START -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3>開票狀況</h3>
+                </div>
+                <div class="panel-body">
+                   <canvas id="myChart2" width="100" height="50"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3>中選會即時資料</h3>
+
+                </div>
+                <canvas id="myChart" width="100" height="50"></canvas>
+                <p>柯P丁丁差距人數: {{ p }}</p>
+                </div>
+            </div>
+                <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3>候選人得票比例</h3>
+
+                </div>
+                <canvas id="myChart3" width="100" height="50"></canvas>
+{#                <p>柯P丁丁差距人數: {{ p }}</p>#}
+                </div>
+            </div>
+        </div>
+    </div>   
+</div>
+
+<!-- you need to include the shieldui css and js assets in order for the charts to work -->
+{#<link rel="stylesheet" type="text/css" href="http://www.shieldui.com/shared/components/latest/css/light/all.min.css" />#}
+{#<script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>#}
+
+<script type="text/javascript">
+    jQuery(function ($) {
+{#        var data1 = [12, 3, 4, 2, 12, 3, 4, 17, 22, 34, 54, 67];#}
+{#        var data2 = [3, 9, 12, 14, 22, 32, 45, 12, 67, 45, 55, 7];#}
+        var data3 = {{ dataPer | safe}};
+        var dataTest={{ dataName |safe}};
+        var dataAll={{ d|safe }};
+        var dataPer={{ dataPerRange|safe }}
+        function setChart() {
+            var ctx = $('#myChart');
+            var ctx2 = $('#myChart2');
+            var ctx3 = $('#myChart3');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: dataTest,
+                    datasets: [{
+                        label: "人數",
+                        data: data3,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255,99,132,1)',
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+
+            var myChart2 = new Chart(ctx2, {
+                type: 'pie',
+                data: {
+                    labels: dataAll,
+                    datasets: [{
+                        label: "人數",
+                        data: dataAll,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255,99,132,1)',
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+{#                options: {#}
+{#                    scales: {#}
+{#                        yAxes: [{#}
+{#                            ticks: {#}
+{#                                beginAtZero: true#}
+{#                            }#}
+{##}
+{#                        }]#}
+{#                    }#}
+{#                }#}
+            });
+
+            var myChart3 = new Chart(ctx3, {
+                type: 'pie',
+                data: {
+                    labels: dataTest,
+                    datasets: [{
+                        label: "人數",
+                        data: dataPer,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255,99,132,1)',
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+{#                options: {#}
+{#                    scales: {#}
+{#                        yAxes: [{#}
+{#                            ticks: {#}
+{#                                beginAtZero: true#}
+{#                            }#}
+{##}
+{#                        }]#}
+{#                    }#}
+{#                }#}
+            });
+        };
+   setChart();
+   setTimeout(function(){
+    window.location.reload(1);
+{#        setChart();#}
+    }, 5000);
+{#    var t=setInterval(setChart,5000);#}
+{#        $("#chart2").shieldChart({#}
+{#            exportOptions: {#}
+{#                image: false,#}
+{#                print: false#}
+{#            },#}
+{#            axisY: {#}
+{#                title: {#}
+{#                    text: "Break-Down for selected quarter"#}
+{#                }#}
+{#            },#}
+{#            dataSeries: [{#}
+{#                seriesType: "bar",#}
+{#                data: data2#}
+{#            }, {#}
+{#                seriesType: "bar",#}
+{#                data: data3#}
+{#            }]#}
+{#        });#}
+    });
+</script>
+<!-- Bar Chart - END -->
+
+</div>
+
+</body>
+</html>
+
+{% endblock %}
