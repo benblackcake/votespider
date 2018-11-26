@@ -1,5 +1,4 @@
-# votespider
-# 中選會網站爬蟲
+# 中選會網站爬蟲votespider
 
 ## 使用說明
 >套件 BeautifulSoup requests django2.0.7
